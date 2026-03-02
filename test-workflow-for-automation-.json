@@ -1,0 +1,32 @@
+{
+  "updatedAt": "2026-03-01T19:37:50.485Z",
+  "createdAt": "2026-03-01T19:37:50.485Z",
+  "id": "uMhtgLkHmcLaPPEq",
+  "name": "Test Workflow for automation",
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "90869369-5538-4711-9e8a-63f015abcc8b",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-01T19:37:50.490Z",
+      "createdAt": "2026-03-01T19:37:50.490Z",
+      "role": "workflow:owner",
+      "workflowId": "uMhtgLkHmcLaPPEq",
+      "projectId": "a2ue7y8O1L291ku7"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
