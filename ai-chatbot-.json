@@ -1,0 +1,395 @@
+{
+  "updatedAt": "2026-03-04T20:10:48.621Z",
+  "createdAt": "2026-03-04T19:49:19.064Z",
+  "id": "MVzwxx39f6Hk6u8D",
+  "name": "AI CHATBOT",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b0ab9e4b-e0d3-4e68-83e3-41fb02ec5173",
+      "name": "Telegram Trigger",
+      "webhookId": "4871c7b7-3e32-4f79-8bcc-c640efa7e336",
+      "credentials": {
+        "telegramApi": {
+          "id": "NqZGivE9hgenWLSy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "You are a helpful AI assistant that extends an news bot. You have the memory to access information abiut the previous new articles that might be shown to the person. Use that and the Tavily Tool to search the web and generate apt answers"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "aeb9f6c1-0ed2-4186-aea1-7b8d86fd53fa",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "5641924507",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        240
+      ],
+      "id": "e2a78fe5-d838-47d9-8e3e-c4dc23663245",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        240
+      ],
+      "id": "f51bd246-65ab-425f-84aa-1be624056c42",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "2SwqjAvqX3tREXdu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        400,
+        240
+      ],
+      "id": "48e387e7-76d6-485c-8074-faa2a8f512d3",
+      "name": "Tavily Tool",
+      "credentials": {
+        "tavilyApi": {
+          "id": "YQlG4RcUokyAgXL8",
+          "name": "Tavily account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "5641924507",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "c4db88c4-901e-4e24-9257-61a4795f2126",
+      "name": "Send a text message",
+      "webhookId": "7751a56a-7d25-456c-af61-36c699dbad58",
+      "credentials": {
+        "telegramApi": {
+          "id": "NqZGivE9hgenWLSy",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "baa966ec-60f1-441c-b48f-a52ca062394c",
+  "activeVersionId": "baa966ec-60f1-441c-b48f-a52ca062394c",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-04T19:49:19.067Z",
+      "createdAt": "2026-03-04T19:49:19.067Z",
+      "role": "workflow:owner",
+      "workflowId": "MVzwxx39f6Hk6u8D",
+      "projectId": "a2ue7y8O1L291ku7"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-04T20:15:38.000Z",
+    "createdAt": "2026-03-04T20:10:48.622Z",
+    "versionId": "baa966ec-60f1-441c-b48f-a52ca062394c",
+    "workflowId": "MVzwxx39f6Hk6u8D",
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "message"
+          ],
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          0
+        ],
+        "id": "b0ab9e4b-e0d3-4e68-83e3-41fb02ec5173",
+        "name": "Telegram Trigger",
+        "webhookId": "4871c7b7-3e32-4f79-8bcc-c640efa7e336",
+        "credentials": {
+          "telegramApi": {
+            "id": "NqZGivE9hgenWLSy",
+            "name": "Telegram account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.message.text }}",
+          "options": {
+            "systemMessage": "You are a helpful AI assistant that extends an news bot. You have the memory to access information abiut the previous new articles that might be shown to the person. Use that and the Tavily Tool to search the web and generate apt answers"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          208,
+          0
+        ],
+        "id": "aeb9f6c1-0ed2-4186-aea1-7b8d86fd53fa",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "5641924507",
+          "contextWindowLength": 20
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          256,
+          240
+        ],
+        "id": "e2a78fe5-d838-47d9-8e3e-c4dc23663245",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          96,
+          240
+        ],
+        "id": "f51bd246-65ab-425f-84aa-1be624056c42",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "2SwqjAvqX3tREXdu",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+        "typeVersion": 1,
+        "position": [
+          400,
+          240
+        ],
+        "id": "48e387e7-76d6-485c-8074-faa2a8f512d3",
+        "name": "Tavily Tool",
+        "credentials": {
+          "tavilyApi": {
+            "id": "YQlG4RcUokyAgXL8",
+            "name": "Tavily account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "5641924507",
+          "text": "={{ $json.output }}",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          560,
+          0
+        ],
+        "id": "c4db88c4-901e-4e24-9257-61a4795f2126",
+        "name": "Send a text message",
+        "webhookId": "7751a56a-7d25-456c-af61-36c699dbad58",
+        "credentials": {
+          "telegramApi": {
+            "id": "NqZGivE9hgenWLSy",
+            "name": "Telegram account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Telegram Trigger": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tavily Tool": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Manjot Singh",
+    "name": "Version baa966ec",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
