@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-03T18:54:12.118Z",
+  "updatedAt": "2026-03-04T19:48:10.171Z",
   "createdAt": "2026-03-03T15:06:00.764Z",
   "id": "XWAa0eFoZoeXWJeQ",
   "name": "News Chatbot",
@@ -195,6 +195,21 @@
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "5641924507",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        688,
+        256
+      ],
+      "id": "7680a77d-25f1-4203-bc15-6116bac8be96",
+      "name": "Simple Memory"
     }
   ],
   "connections": {
@@ -252,12 +267,26 @@
           }
         ]
       ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -267,412 +296,9 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {
-    "HTTP Request": [
-      {
-        "json": {
-          "status": "success",
-          "totalResults": 588,
-          "results": [
-            {
-              "article_id": "8236cc7ea0313f745d8326de0a14ee8c",
-              "link": "https://www.thehindu.com/news/national/west-indies-cricket-team-stranded-in-india-due-to-international-airspace-restrictions/article70698065.ece",
-              "title": "West Indies cricket team stranded in India due to international airspace restrictions",
-              "description": "\"Cricket West Indies [CWI] wishes to advise that the departure of the West Indies Senior Men's Team from India, following their exit from the ICC Men's T20 World Cup, has been delayed due to international airspace restrictions,\" says the board statement",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "india"
-              ],
-              "creator": [
-                "authors & contributors"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "sports",
-                "top"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:24:49",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:47",
-              "image_url": "https://th-i.thgim.com/public/incoming/815c36/article70698079.ece/alternates/LANDSCAPE_1200/2026-03-01T173348Z_1530508989_UP1EM311CSBRI_RTRMADP_3_CRICKET-T20-WORLDCUP-IND-WIN.JPG",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": false
-            },
-            {
-              "article_id": "19a26fad11a5be2266de71f11e379e53",
-              "link": "https://www.thehindu.com/business/oil-rises-as-expanding-us-israeli-conflict-with-iran-elevates-supply-risks/article70698036.ece",
-              "title": "Oil rises as expanding U.S.-Israeli conflict with Iran elevates supply risks",
-              "description": "Concerns about transiting the waterway increased after Iranian media reported on Monday ​(March 2, 2026) that a senior Iranian Revolutionary Guards official said the Strait of Hormuz is closed and warned Iran will fire on any ship trying ⁠to pass",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "business"
-              ],
-              "creator": [
-                "authors & contributors"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "politics",
-                "top"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:21:26",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:44",
-              "image_url": "https://th-i.thgim.com/public/incoming/9b74c4/article70698061.ece/alternates/LANDSCAPE_1200/2026-03-02T231744Z_992362881_RC2MWJAUF83I_RTRMADP_3_IRAN-CRISIS-OIL-INDIA.JPG",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": false
-            },
-            {
-              "article_id": "079fc54cf9549805a12a56ee0263237f",
-              "link": "https://www.thehindu.com/news/national/karnataka/road-rage-one-dead-two-injured-after-motorist-drives-into-trio-who-told-him-to-slow-down-in-karnataka-village/article70698011.ece",
-              "title": "Road rage: One dead, two injured after motorist rams into trio who told him to slow down in Karnataka village",
-              "description": "The driver allegedly drove the vehicle at the trio",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "karnataka"
-              ],
-              "creator": [
-                "the hindu bureau"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "top",
-                "crime"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:20:39",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:38",
-              "image_url": "https://th-i.thgim.com/public/incoming/x5lt28/article70698087.ece/alternates/LANDSCAPE_1200/29kimpp01_MVD_Gki30road.jpg.jpg",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": false
-            },
-            {
-              "article_id": "c224585c8494e689f0f62dff3d9c702c",
-              "link": "https://www.thehindu.com/videos/watch-marco-rubio-us-not-currently-postured-for-ground-forces-in-iran/article70698072.ece",
-              "title": "Watch | Marco Rubio: U.S. not currently postured for ground forces in Iran",
-              "description": "U.S. Secretary of State Marco Rubio said the United States is not currently postured to deploy ground forces in Iran, though President Donald Trump retains that option.",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "videos"
-              ],
-              "creator": [
-                "the hindu bureau"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "politics",
-                "top"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:09:24",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:40",
-              "image_url": "https://th-i.thgim.com/public/incoming/8g43ja/article70698069.ece/alternates/LANDSCAPE_1200/News%20Video%20Thumbs%202026%201.png",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": false
-            },
-            {
-              "article_id": "035c01360111589401a91e6d66272da2",
-              "link": "https://www.thehindu.com/brandhub/pr-release/smu-and-fudan-launch-regions-first-tech-focused-dba/article70695306.ece",
-              "title": "SMU and Fudan Launch Region’s First Tech-Focused DBA",
-              "description": "SMU and Fudan Launch Region's First Tech-Focused DBA",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "pr release"
-              ],
-              "creator": [
-                "authors & contributors"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "technology",
-                "top"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:06:16",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:36",
-              "image_url": "https://th-i.thgim.com/public/incoming/leoocv/article70695398.ece/alternates/LANDSCAPE_1200/Singapore_Management_University_Logo%201.jpg",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": true
-            },
-            {
-              "article_id": "1b05369ab2b6f98c2e453299e9ab89c3",
-              "link": "https://www.thehindu.com/brandhub/pr-release/ray-of-hope-for-end-stage-liver-patients-manipal-hospital-bhubaneswar-sets-new-benchmarks-in-liver-transplant/article70695118.ece",
-              "title": "Ray of Hope for End-Stage Liver Patients: Manipal Hospital Bhubaneswar Sets New Benchmarks in Liver Transplant",
-              "description": "Ray of Hope for End-Stage Liver Patients: Manipal Hospital Bhubaneswar Sets New Benchmarks in Liver Transplant",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "pr release"
-              ],
-              "creator": [
-                "authors & contributors"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "health",
-                "top"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:05:34",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:40",
-              "image_url": "https://th-i.thgim.com/public/incoming/tanzei/article70695127.ece/alternates/LANDSCAPE_1200/Manipal_Liver_transplant.jpg",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": true
-            },
-            {
-              "article_id": "21c7fe885098240cb2b0047ce78c25aa",
-              "link": "https://www.thehindu.com/brandhub/pr-release/understanding-chinas-whole-process-peoples-democracy/article70694305.ece",
-              "title": "Understanding China’s whole-process people’s democracy",
-              "description": "Understanding China’s whole-process people’s democracy",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "pr release"
-              ],
-              "creator": [
-                "authors & contributors"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "politics",
-                "top"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:04:25",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:44",
-              "image_url": "https://www.thehindu.com/theme/images/og-image.png",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": true
-            },
-            {
-              "article_id": "dda535897c1fd75e65868c42665b2d2b",
-              "link": "https://www.thehindu.com/sport/cricket/pcb-to-impose-financial-penalties-on-pakistan-players-for-t20wc-debacle/article70698043.ece",
-              "title": "PCB to impose financial penalties on Pakistan players for T20WC debacle",
-              "description": "A reliable source said that appropriate action is being considered by the Pakistan Cricket Board (PCB) in the wake of the team's exit from the Super Eight stage of the event",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "cricket"
-              ],
-              "creator": [
-                "authors & contributors"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "sports"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:03:16",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:43",
-              "image_url": "https://www.thehindu.com/theme/images/th-online/1x1_spacer.png",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": true
-            },
-            {
-              "article_id": "1e2d2869cb2da0af6e77be80286b97fc",
-              "link": "https://www.thehindu.com/sport/football/real-madrid-loses-to-getafe-misses-chance-to-close-gap-on-la-liga-leader-barcelona/article70698042.ece",
-              "title": "Real Madrid loses to Getafe, misses chance to close gap on La Liga leader Barcelona",
-              "description": "Martin Satriano scored a stunning volley in a 1-0 win at the Bernebeu; Barcelona remains 4 points ahead of Madrid",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "football"
-              ],
-              "creator": [
-                "authors & contributors"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "sports"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 05:01:04",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:34:42",
-              "image_url": "https://th-i.thgim.com/public/incoming/sk3d9k/article70698044.ece/alternates/LANDSCAPE_1200/Spain_La_Liga_Soccer_66251.jpg",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": false
-            },
-            {
-              "article_id": "d85d97b3a4f209ca57da865c833a2d29",
-              "link": "https://www.thehindu.com/news/national/protests-against-khamenei-killing-curbs-remain-in-force-in-kashmir/article70698018.ece",
-              "title": "Protests against Khamenei's killing: Curbs remain in force in Kashmir",
-              "description": "At least 14 people, including six security personnel, were injured during protests on Monday (March 2, 2026) that erupted in Jammu and Kashmir following the killing of Khamenei",
-              "content": "ONLY AVAILABLE IN PAID PLANS",
-              "keywords": [
-                "india"
-              ],
-              "creator": [
-                "authors & contributors"
-              ],
-              "language": "english",
-              "country": [
-                "india"
-              ],
-              "category": [
-                "top",
-                "crime"
-              ],
-              "datatype": "news",
-              "pubDate": "2026-03-03 04:58:47",
-              "pubDateTZ": "UTC",
-              "fetched_at": "2026-03-03 05:03:48",
-              "image_url": "https://th-i.thgim.com/public/incoming/iibkd6/article70698034.ece/alternates/LANDSCAPE_1200/25-RESTRICTIONS-SGR-03-03-2026.JPG",
-              "video_url": null,
-              "source_id": "thehindu",
-              "source_name": "The Hindu",
-              "source_priority": 2972,
-              "source_url": "https://www.thehindu.com",
-              "source_icon": "https://n.bytvi.com/thehindu.png",
-              "sentiment": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "sentiment_stats": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_tag": "ONLY AVAILABLE IN PROFESSIONAL AND CORPORATE PLANS",
-              "ai_region": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_org": "ONLY AVAILABLE IN CORPORATE PLANS",
-              "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
-              "duplicate": false
-            }
-          ],
-          "nextPage": "1772513927721294906"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
-  "versionId": "422e6dde-3c84-4b11-bc02-2447b078933a",
-  "activeVersionId": "422e6dde-3c84-4b11-bc02-2447b078933a",
+  "pinData": {},
+  "versionId": "f44437e0-1a0f-4abf-961c-e77fbfea8fd5",
+  "activeVersionId": "f44437e0-1a0f-4abf-961c-e77fbfea8fd5",
   "triggerCount": 1,
   "shared": [
     {
@@ -684,9 +310,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-03T19:18:02.000Z",
-    "createdAt": "2026-03-03T18:54:12.119Z",
-    "versionId": "422e6dde-3c84-4b11-bc02-2447b078933a",
+    "updatedAt": "2026-03-04T19:48:55.000Z",
+    "createdAt": "2026-03-04T19:48:10.171Z",
+    "versionId": "f44437e0-1a0f-4abf-961c-e77fbfea8fd5",
     "workflowId": "XWAa0eFoZoeXWJeQ",
     "nodes": [
       {
@@ -878,6 +504,21 @@
             "name": "Telegram account"
           }
         }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "5641924507",
+          "contextWindowLength": 20
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          688,
+          256
+        ],
+        "id": "7680a77d-25f1-4203-bc15-6116bac8be96",
+        "name": "Simple Memory"
       }
     ],
     "connections": {
@@ -935,10 +576,21 @@
             }
           ]
         ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Manjot Singh",
-    "name": "Version 422e6dde",
+    "name": "Version f44437e0",
     "description": "",
     "autosaved": true
   },
