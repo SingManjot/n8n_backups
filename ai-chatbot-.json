@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-04T20:10:48.621Z",
+  "updatedAt": "2026-03-07T14:01:49.074Z",
   "createdAt": "2026-03-04T19:49:19.064Z",
   "id": "MVzwxx39f6Hk6u8D",
   "name": "AI CHATBOT",
@@ -111,7 +111,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        560,
+        544,
         0
       ],
       "id": "c4db88c4-901e-4e24-9257-61a4795f2126",
@@ -192,7 +192,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "baa966ec-60f1-441c-b48f-a52ca062394c",
+  "versionId": "2d91d8dc-4c70-4f87-a6fc-ccab2c6700e5",
   "activeVersionId": "baa966ec-60f1-441c-b48f-a52ca062394c",
   "triggerCount": 1,
   "shared": [
