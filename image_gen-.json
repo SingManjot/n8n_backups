@@ -1,0 +1,107 @@
+{
+  "updatedAt": "2026-03-08T07:14:09.000Z",
+  "createdAt": "2026-03-08T04:10:59.759Z",
+  "id": "jCNRcusov1doOQY0",
+  "name": "IMAGE_GEN",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "06a33671-dafd-4f35-9b33-bde0d858bde4",
+      "name": "When chat message received",
+      "webhookId": "ad9a835a-9fb1-40e2-9b29-6471be666f6d"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://firefly-api.adobe.io/v3/images/generate-async",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <YOUR_JWT_HERE>"
+            },
+            {
+              "name": "x-api-key",
+              "value": "YOUR_API_KEY_HERE"
+            },
+            {
+              "name": "x-model-version",
+              "value": "image3"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"contentClass\": \"photo\",\n  \"customModelId\": \"string\",\n  \"negativePrompt\": \"string\",\n  \"numVariations\": 1,\n  \"prompt\": \"string\",\n  \"promptBiasingLocaleCode\": \"string\",\n  \"seeds\": [\n    0\n  ],\n  \"size\": {\n    \"height\": 2048,\n    \"width\": 2048\n  },\n  \"structure\": {\n    \"imageReference\": {\n      \"source\": {\n        \"uploadId\": \"string\",\n        \"url\": \"http://example.com\"\n      }\n    },\n    \"strength\": 100\n  },\n  \"style\": {\n    \"imageReference\": {\n      \"source\": {\n        \"uploadId\": \"string\",\n        \"url\": \"http://example.com\"\n      }\n    },\n    \"presets\": [\n      \"string\"\n    ],\n    \"strength\": 100\n  },\n  \"upsamplerType\": \"default\",\n  \"visualIntensity\": 2\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3f9f44f3-ca89-443f-8db3-7dab1a4445a8",
+      "name": "HTTP Request"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "866b67f0-03d8-443f-a28c-063139ce0096",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-08T04:10:59.763Z",
+      "createdAt": "2026-03-08T04:10:59.763Z",
+      "role": "workflow:owner",
+      "workflowId": "jCNRcusov1doOQY0",
+      "projectId": "a2ue7y8O1L291ku7"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
