@@ -1,0 +1,341 @@
+{
+  "updatedAt": "2026-07-07T15:56:56.091Z",
+  "createdAt": "2026-07-07T15:09:32.652Z",
+  "id": "bEvKqfEaaZVqPB2T",
+  "name": "Code Review workflow",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "events": [
+          "pull_request"
+        ],
+        "options": {}
+      },
+      "id": "80d7365c-31c4-4497-bf35-6ccfd72ebda9",
+      "name": "PR Trigger",
+      "type": "n8n-nodes-base.githubTrigger",
+      "position": [
+        1840,
+        1296
+      ],
+      "webhookId": "2b8ec7bd-e65b-46d2-a2d9-082b137dd880",
+      "notesInFlow": false,
+      "typeVersion": 1,
+      "credentials": {
+        "githubApi": {
+          "id": "Sjh75tnjEKPM4GOm",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/{{$json.body.sender.login}}/{{$json.body.repository.name}}/pulls/{{$json.body.number}}/files",
+        "options": {}
+      },
+      "id": "d8baf85d-55f7-4777-905a-1601581aadf5",
+      "name": "Get file's Diffs from PR",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2064,
+        1296
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "jsCode": "const files = $input.all().map(item => item.json);\n\nlet diffs = '';\n\nfor (const file of files) {\n  diffs += `### Fichier : ${file.filename}\\n\\n`;\n\n  if (file.patch) {\n    // IMPORTANT : On remplace tous les triple backticks par simple (ou échappement)\n    const safePatch = file.patch.replace(/```/g, \"''\");\n\n    diffs += \"```diff\\n\";\n    diffs += safePatch;\n    diffs += \"\\n```\\n\";\n  } else {\n    diffs += \"_Pas de patch disponible (probablement fichier binaire)._\";\n  }\n\n  diffs += \"\\n---\\n\\n\";\n}\n\nconst userMessage = `\nYou are a senior iOS developer. \nPlease review the following code changes in these files :\n\n${diffs}\n\n---\n\nYour mission:\n\n- Review the proposed code changes file by file and by significant modification.\n\n- Generate inline comments on the relevant lines of code.\n\n- Ignore files without patches.\n\n- Do not repeat the code snippet or the filename.\n\n- Write the comments directly, without introducing the context.\n`;\n\nreturn [\n  {\n    json: {\n      user_message: userMessage.trim()\n    }\n  }\n];"
+      },
+      "id": "3cd97142-6ede-4295-8559-145d118f1754",
+      "name": "Create target Prompt from PR Diffs",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2288,
+        1296
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "resource": "review",
+        "owner": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "pullRequestNumber": "={{ $('PR Trigger').first().json.body.number }}",
+        "event": "comment",
+        "body": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "id": "f0730c73-05c9-4493-b915-bb6b2ee3970c",
+      "name": "GitHub Robot",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        2880,
+        1296
+      ],
+      "webhookId": "39c2fe8b-f686-4699-8450-2a5b4c263d93",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultUrl": "",
+          "cachedResultName": ""
+        },
+        "issueNumber": "={{ $('PR Trigger').first().json.body.number }}",
+        "editFields": {
+          "labels": [
+            {
+              "label": "ReviewedByAI"
+            }
+          ]
+        }
+      },
+      "id": "960f3da2-f5fd-4aaa-81b2-9040b9b198df",
+      "name": "Add Label to PR",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        3104,
+        1296
+      ],
+      "webhookId": "c98f39f1-603b-4013-9149-53b4cc31b611",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**1-The GitHub Trigger** node initiates the workflow whenever a pull request event occurs on a specified repository. It enables real-time automation based on GitHub activity.\n",
+        "height": 208,
+        "width": 224
+      },
+      "id": "b2b96ada-591d-43a0-87fa-2ed6ec6d0e87",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1712,
+        1056
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**2-Get PR Diffs**\nThe HTTP Request node fetches the list of changed files and their diffs from the pull request that triggered the workflow. It uses the GitHub REST API to retrieve this data dynamically based on the trigger payload.\n\nhttps://api.github.com/repos/{{$json.body.sender.login}}/{{$json.body.repository.name}}/pulls/{{$json.body.number}}/files",
+        "height": 316,
+        "width": 340,
+        "color": 3
+      },
+      "id": "a6d251db-e714-488b-bcb5-ec8387cbd0d6",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1952,
+        1472
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**3-Create Prompt from diffs**\nThis Code node runs a JavaScript snippet to:\n-Parse file diffs from the previous HTTP Request node\n-Format each diff with its file name\n-Build a structured natural language prompt for the AI agent\n\nThe final output is a clear, contextual instruction like:\n*\"You are a senior iOS developer. Please review the following code changes in these files...\"*\n",
+        "height": 352,
+        "width": 376,
+        "color": 2
+      },
+      "id": "f62d404e-dd3e-456b-a144-751072473dcd",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2160,
+        912
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Github Comment Poster**\nPosts the AI-generated review as a comment on the pull request using GitHub API.",
+        "color": 5
+      },
+      "id": "ecde2a47-936f-4fae-9d01-58462049658c",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2784,
+        1104
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.user_message }}",
+        "options": {}
+      },
+      "id": "c0eceaad-569c-4e22-a882-2383b9a3b84e",
+      "name": "Code Review Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        2512,
+        1296
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "content": "**PR Labeler (optional)**\nAutomatically adds a label like *ReviewedByAI* to the pull request once the AI comment is posted.",
+        "height": 168,
+        "color": 7
+      },
+      "id": "ad3efb30-4d35-43fa-a084-040293b21d3e",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3040,
+        1104
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2448,
+        1504
+      ],
+      "id": "9fd24fcc-efe9-4e1e-877d-77acf1ba4063",
+      "name": "Google Gemini Chat Model"
+    }
+  ],
+  "connections": {
+    "PR Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get file's Diffs from PR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub Robot": {
+      "main": [
+        [
+          {
+            "node": "Add Label to PR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Review Agent": {
+      "main": [
+        [
+          {
+            "node": "GitHub Robot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get file's Diffs from PR": {
+      "main": [
+        [
+          {
+            "node": "Create target Prompt from PR Diffs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create target Prompt from PR Diffs": {
+      "main": [
+        [
+          {
+            "node": "Code Review Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Code Review Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "dcd56563-6ec7-4862-97d9-ebca57895a40",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-07-07T15:09:32.681Z",
+      "createdAt": "2026-07-07T15:09:32.681Z",
+      "role": "workflow:owner",
+      "workflowId": "bEvKqfEaaZVqPB2T",
+      "projectId": "jJo04DnnBO4LZiN0"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
