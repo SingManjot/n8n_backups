@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-11T06:12:52.794Z",
+  "updatedAt": "2026-07-11T06:18:19.546Z",
   "createdAt": "2026-07-11T06:09:16.237Z",
   "id": "U7s55yCkdoEhyygz",
   "name": "Backup Workflows to GH",
@@ -128,7 +128,13 @@
         112
       ],
       "webhookId": "27218087-8df7-474d-a39f-70cfa9c34ec8",
-      "typeVersion": 1
+      "typeVersion": 1,
+      "credentials": {
+        "githubApi": {
+          "id": "irqFCqKgD4a39yfr",
+          "name": "GitHub account"
+        }
+      }
     },
     {
       "parameters": {
@@ -157,7 +163,13 @@
         272
       ],
       "webhookId": "ce4b561b-acb9-4cd8-b76f-4928dada9674",
-      "typeVersion": 1
+      "typeVersion": 1,
+      "credentials": {
+        "githubApi": {
+          "id": "irqFCqKgD4a39yfr",
+          "name": "GitHub account"
+        }
+      }
     },
     {
       "parameters": {
@@ -392,10 +404,12 @@
     "availableInMCP": false
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "87ba8553-d2da-4839-aade-a7e74dffdf5e",
+  "versionId": "ac7f691b-14f4-4dbb-b1f9-2a1d9bd0cd8a",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
