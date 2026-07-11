@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-11T06:05:56.124Z",
+  "updatedAt": "2026-07-11T06:39:55.414Z",
   "createdAt": "2026-07-11T05:36:36.211Z",
   "id": "7YoHM1NgmTEXrQr6",
   "name": "Code Review workflow",
@@ -33,8 +33,8 @@
       "name": "PR Trigger",
       "type": "n8n-nodes-base.githubTrigger",
       "position": [
-        -320,
-        272
+        -560,
+        288
       ],
       "webhookId": "2b8ec7bd-e65b-46d2-a2d9-082b137dd880",
       "notesInFlow": false,
@@ -62,7 +62,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const files = $input.all().map(item => item.json);\n\nlet diffs = '';\n\nfor (const file of files) {\n  diffs += `### Fichier : ${file.filename}\\n\\n`;\n\n  if (file.patch) {\n    // IMPORTANT : On remplace tous les triple backticks par simple (ou échappement)\n    const safePatch = file.patch.replace(/```/g, \"''\");\n\n    diffs += \"```diff\\n\";\n    diffs += safePatch;\n    diffs += \"\\n```\\n\";\n  } else {\n    diffs += \"_Pas de patch disponible (probablement fichier binaire)._\";\n  }\n\n  diffs += \"\\n---\\n\\n\";\n}\n\nconst userMessage = `\nYou are a senior DEVOPS developer. \nPlease review the following code changes in these files :\n\n${diffs}\n\n---\n\nYour mission:\n\n- Review the proposed code changes file by file and by significant modification.\n\n- Generate inline comments on the relevant lines of code.\n\n- Ignore files without patches.\n\n- Do not repeat the code snippet or the filename.\n\n- Write the comments directly, without introducing the context.\n\n- Check the commit message to see if it matched the changes\n`;\n\nreturn [\n  {\n    json: {\n      user_message: userMessage.trim()\n    }\n  }\n];"
+        "jsCode": "const files = $input.all().map(item => item.json);\n\nlet diffs = '';\n\nfor (const file of files) {\n  diffs += `### Fichier : ${file.filename}\\n\\n`;\n\n  if (file.patch) {\n    // IMPORTANT : On remplace tous les triple backticks par simple (ou échappement)\n    const safePatch = file.patch.replace(/```/g, \"''\");\n\n    diffs += \"```diff\\n\";\n    diffs += safePatch;\n    diffs += \"\\n```\\n\";\n  } else {\n    diffs += \"_Pas de patch disponible (probablement fichier binaire)._\";\n  }\n\n  diffs += \"\\n---\\n\\n\";\n}\n\nconst userMessage = `\nYou are a senior DEVOPS developer. \nPlease review the following code changes in these files :\n\n${diffs}\n\n---\n\nYour mission:\n\n- Review the proposed code changes file by file and by significant modification.\n\n- Generate inline comments on the relevant lines of code.\n\n- Ignore files without patches.\n\n- Do not repeat the code snippet or the filename.\n\n- Write the comments directly, without introducing the context.\n`;\n\nreturn [\n  {\n    json: {\n      user_message: userMessage.trim()\n    }\n  }\n];"
       },
       "id": "cd749145-a5d7-4b29-b19b-6fd277653f68",
       "name": "Create target Prompt from PR Diffs",
@@ -162,15 +162,15 @@
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -480,
-        -16
+        -720,
+        0
       ],
       "typeVersion": 1
     },
     {
       "parameters": {
         "content": "**2-Get PR Diffs**\nThe HTTP Request node fetches the list of changed files and their diffs from the pull request that triggered the workflow. It uses the GitHub REST API to retrieve this data dynamically based on the trigger payload.\n\nhttps://api.github.com/repos/{{$json.body.sender.login}}/{{$json.body.repository.name}}/pulls/{{$json.body.number}}/files",
-        "height": 220,
+        "height": 332,
         "width": 340,
         "color": 3
       },
@@ -186,7 +186,7 @@
     {
       "parameters": {
         "content": "**3-Create Prompt from diffs**\nThis Code node runs a JavaScript snippet to:\n-Parse file diffs from the previous HTTP Request node\n-Format each diff with its file name\n-Build a structured natural language prompt for the AI agent\n\nThe final output is a clear, contextual instruction like:\n*\"You are a senior iOS developer. Please review the following code changes in these files...\"*\n",
-        "height": 240,
+        "height": 368,
         "width": 360,
         "color": 2
       },
@@ -195,7 +195,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         0,
-        0
+        -144
       ],
       "typeVersion": 1
     },
@@ -231,30 +231,15 @@
     {
       "parameters": {
         "content": "**PR Labeler (optional)**\nAutomatically adds a label like *ReviewedByAI* to the pull request once the AI comment is posted.",
-        "height": 120,
+        "height": 152,
         "color": 7
       },
       "id": "d0deeb6d-b6bc-432b-9f03-4039ab87376a",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        880,
-        128
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "content": "**Google Sheet Best Practices**\nEnables the AI agent to reference to your team coding guidelines stored in a Google Sheet for more accurate and opinionated reviews.\nYou can replace Google Sheets with any other database or tool.",
-        "width": 260,
-        "color": 6
-      },
-      "id": "cde290ed-95bf-484c-be92-2a40c1426b1f",
-      "name": "Sticky Note5",
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        608,
-        464
+        912,
+        80
       ],
       "typeVersion": 1
     },
@@ -277,6 +262,62 @@
           "name": "Google Gemini(PaLM) Api account"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fc41337f-53d3-4fa5-9488-e3e322e06f4a",
+              "leftValue": "={{ $json.body.pull_request.state }}",
+              "rightValue": "open",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "d3ed4bff-fa1f-4122-bfab-f8b37b45ea6a",
+              "leftValue": "={{ $json.body.pull_request.state }}",
+              "rightValue": "synchronize",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -352,
+        288
+      ],
+      "id": "27418ed2-7532-4d88-b136-768d21c202c8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "**2-If condition** \nOnly perform the review in case pr is opened or updated",
+        "color": "#804040"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -384,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "66015ae0-2da9-477e-a369-da4ea1955b7e",
+      "name": "Sticky Note6"
     }
   ],
   "connections": {
@@ -284,7 +325,7 @@
       "main": [
         [
           {
-            "node": "Get file's Diffs from PR",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -345,6 +386,17 @@
           }
         ]
       ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get file's Diffs from PR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -354,11 +406,11 @@
   },
   "staticData": {
     "node:PR Trigger": {
-      "webhookId": 651549218,
+      "webhookId": 651558284,
       "webhookEvents": [
         "pull_request"
       ],
-      "webhookSecret": "35f22006ff77ed1e3874dfdc5fe98098c2bed21bfc87a0fad37af9d620598e3f"
+      "webhookSecret": "41c40f917be1eb1a410249ccdce12ed816ae86d3d2b74d86d76522b81cf64b78"
     }
   },
   "meta": {
@@ -366,8 +418,8 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "9376c07e-6de4-4e7b-875a-e3277a175f12",
-  "activeVersionId": "9376c07e-6de4-4e7b-875a-e3277a175f12",
+  "versionId": "7c08f0b9-019b-4d46-b93b-ef909578d53f",
+  "activeVersionId": "7c08f0b9-019b-4d46-b93b-ef909578d53f",
   "triggerCount": 1,
   "shared": [
     {
@@ -379,9 +431,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-07-11T06:06:02.000Z",
-    "createdAt": "2026-07-11T06:05:56.125Z",
-    "versionId": "9376c07e-6de4-4e7b-875a-e3277a175f12",
+    "updatedAt": "2026-07-11T06:40:00.000Z",
+    "createdAt": "2026-07-11T06:39:55.415Z",
+    "versionId": "7c08f0b9-019b-4d46-b93b-ef909578d53f",
     "workflowId": "7YoHM1NgmTEXrQr6",
     "nodes": [
       {
@@ -411,8 +463,8 @@
         "name": "PR Trigger",
         "type": "n8n-nodes-base.githubTrigger",
         "position": [
-          -320,
-          272
+          -560,
+          288
         ],
         "webhookId": "2b8ec7bd-e65b-46d2-a2d9-082b137dd880",
         "notesInFlow": false,
@@ -440,7 +492,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const files = $input.all().map(item => item.json);\n\nlet diffs = '';\n\nfor (const file of files) {\n  diffs += `### Fichier : ${file.filename}\\n\\n`;\n\n  if (file.patch) {\n    // IMPORTANT : On remplace tous les triple backticks par simple (ou échappement)\n    const safePatch = file.patch.replace(/```/g, \"''\");\n\n    diffs += \"```diff\\n\";\n    diffs += safePatch;\n    diffs += \"\\n```\\n\";\n  } else {\n    diffs += \"_Pas de patch disponible (probablement fichier binaire)._\";\n  }\n\n  diffs += \"\\n---\\n\\n\";\n}\n\nconst userMessage = `\nYou are a senior DEVOPS developer. \nPlease review the following code changes in these files :\n\n${diffs}\n\n---\n\nYour mission:\n\n- Review the proposed code changes file by file and by significant modification.\n\n- Generate inline comments on the relevant lines of code.\n\n- Ignore files without patches.\n\n- Do not repeat the code snippet or the filename.\n\n- Write the comments directly, without introducing the context.\n\n- Check the commit message to see if it matched the changes\n`;\n\nreturn [\n  {\n    json: {\n      user_message: userMessage.trim()\n    }\n  }\n];"
+          "jsCode": "const files = $input.all().map(item => item.json);\n\nlet diffs = '';\n\nfor (const file of files) {\n  diffs += `### Fichier : ${file.filename}\\n\\n`;\n\n  if (file.patch) {\n    // IMPORTANT : On remplace tous les triple backticks par simple (ou échappement)\n    const safePatch = file.patch.replace(/```/g, \"''\");\n\n    diffs += \"```diff\\n\";\n    diffs += safePatch;\n    diffs += \"\\n```\\n\";\n  } else {\n    diffs += \"_Pas de patch disponible (probablement fichier binaire)._\";\n  }\n\n  diffs += \"\\n---\\n\\n\";\n}\n\nconst userMessage = `\nYou are a senior DEVOPS developer. \nPlease review the following code changes in these files :\n\n${diffs}\n\n---\n\nYour mission:\n\n- Review the proposed code changes file by file and by significant modification.\n\n- Generate inline comments on the relevant lines of code.\n\n- Ignore files without patches.\n\n- Do not repeat the code snippet or the filename.\n\n- Write the comments directly, without introducing the context.\n`;\n\nreturn [\n  {\n    json: {\n      user_message: userMessage.trim()\n    }\n  }\n];"
         },
         "id": "cd749145-a5d7-4b29-b19b-6fd277653f68",
         "name": "Create target Prompt from PR Diffs",
@@ -540,15 +592,15 @@
         "name": "Sticky Note",
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          -480,
-          -16
+          -720,
+          0
         ],
         "typeVersion": 1
       },
       {
         "parameters": {
           "content": "**2-Get PR Diffs**\nThe HTTP Request node fetches the list of changed files and their diffs from the pull request that triggered the workflow. It uses the GitHub REST API to retrieve this data dynamically based on the trigger payload.\n\nhttps://api.github.com/repos/{{$json.body.sender.login}}/{{$json.body.repository.name}}/pulls/{{$json.body.number}}/files",
-          "height": 220,
+          "height": 332,
           "width": 340,
           "color": 3
         },
@@ -564,7 +616,7 @@
       {
         "parameters": {
           "content": "**3-Create Prompt from diffs**\nThis Code node runs a JavaScript snippet to:\n-Parse file diffs from the previous HTTP Request node\n-Format each diff with its file name\n-Build a structured natural language prompt for the AI agent\n\nThe final output is a clear, contextual instruction like:\n*\"You are a senior iOS developer. Please review the following code changes in these files...\"*\n",
-          "height": 240,
+          "height": 368,
           "width": 360,
           "color": 2
         },
@@ -573,7 +625,7 @@
         "type": "n8n-nodes-base.stickyNote",
         "position": [
           0,
-          0
+          -144
         ],
         "typeVersion": 1
       },
@@ -609,30 +661,15 @@
       {
         "parameters": {
           "content": "**PR Labeler (optional)**\nAutomatically adds a label like *ReviewedByAI* to the pull request once the AI comment is posted.",
-          "height": 120,
+          "height": 152,
           "color": 7
         },
         "id": "d0deeb6d-b6bc-432b-9f03-4039ab87376a",
         "name": "Sticky Note4",
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          880,
-          128
-        ],
-        "typeVersion": 1
-      },
-      {
-        "parameters": {
-          "content": "**Google Sheet Best Practices**\nEnables the AI agent to reference to your team coding guidelines stored in a Google Sheet for more accurate and opinionated reviews.\nYou can replace Google Sheets with any other database or tool.",
-          "width": 260,
-          "color": 6
-        },
-        "id": "cde290ed-95bf-484c-be92-2a40c1426b1f",
-        "name": "Sticky Note5",
-        "type": "n8n-nodes-base.stickyNote",
-        "position": [
-          608,
-          464
+          912,
+          80
         ],
         "typeVersion": 1
       },
@@ -655,6 +692,62 @@
             "name": "Google Gemini(PaLM) Api account"
           }
         }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "fc41337f-53d3-4fa5-9488-e3e322e06f4a",
+                "leftValue": "={{ $json.body.pull_request.state }}",
+                "rightValue": "open",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "d3ed4bff-fa1f-4122-bfab-f8b37b45ea6a",
+                "leftValue": "={{ $json.body.pull_request.state }}",
+                "rightValue": "synchronize",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -352,
+          288
+        ],
+        "id": "27418ed2-7532-4d88-b136-768d21c202c8",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "content": "**2-If condition** \nOnly perform the review in case pr is opened or updated",
+          "color": "#804040"
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -384,
+          64
+        ],
+        "typeVersion": 1,
+        "id": "66015ae0-2da9-477e-a369-da4ea1955b7e",
+        "name": "Sticky Note6"
       }
     ],
     "connections": {
@@ -662,7 +755,7 @@
         "main": [
           [
             {
-              "node": "Get file's Diffs from PR",
+              "node": "If",
               "type": "main",
               "index": 0
             }
@@ -723,13 +816,24 @@
             }
           ]
         ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Get file's Diffs from PR",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Manjot Singh",
-    "name": "Version 9376c07e",
+    "name": "Version 7c08f0b9",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": []
 }
