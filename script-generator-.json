@@ -1,0 +1,639 @@
+{
+  "updatedAt": "2026-07-11T14:05:28.971Z",
+  "createdAt": "2026-07-11T07:26:28.022Z",
+  "id": "8kbg43UgtXXMbBTH",
+  "name": "Script Generator",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Story Image Generator",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Topic"
+            },
+            {
+              "fieldLabel": "The Story"
+            },
+            {
+              "fieldLabel": "Email Address",
+              "fieldType": "email"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "customCss": ":root {\n    --font-family: 'Open Sans', sans-serif;\n    --font-weight-normal: 400;\n    --font-weight-bold: 600;\n    --font-size-body: 12px;\n    --font-size-label: 14px;\n    --font-size-test-notice: 12px;\n    --font-size-input: 14px;\n    --font-size-header: 20px;\n    --font-size-paragraph: 14px;\n    --font-size-link: 12px;\n    --font-size-error: 12px;\n    --font-size-html-h1: 28px;\n    --font-size-html-h2: 20px;\n    --font-size-html-h3: 16px;\n    --font-size-html-h4: 14px;\n    --font-size-html-h5: 12px;\n    --font-size-html-h6: 10px;\n    --font-size-subheader: 14px;\n\n    /* Theme Architecture */\n    --color-background: #0d1117;             /* Deep slate background */\n    --color-test-notice-text: #111111;        /* Solid black text for clear warning read */\n    --color-test-notice-bg: #ffb74d;          /* Vibrant amber backdrop to contrast black text */\n    --color-test-notice-border: #443215;      \n    \n    --color-card-bg: #161b22;                 /* Elevated container dark canvas */\n    --color-card-border: #30363d;             \n    --color-card-shadow: rgba(0, 0, 0, 0.4);  \n    \n    --color-link: #111111;                    /* Bold black utility links */\n    --color-header: #000000;                  /* Pure black header typography */\n    --color-header-subtext: #1a1a1a;          /* Dark charcoal secondary text */\n    --color-label: #000000;                   /* Strong black form input titles */\n    \n    --color-input-border: #30363d;            \n    --color-input-text: #111111;              /* Rich black text entry string */\n    --color-focus-border: #58a6ff;            \n    \n    --color-submit-btn-bg: #ff6d5a;           \n    --color-submit-btn-text: #ffffff;         /* Kept clean white for functional visibility against the signature button background */\n    --color-clear-button-bg: #30363d;         \n    \n    --color-error: #f85149;                   \n    --color-required: #ff6d5a;                \n    --color-html-text: #000000;               /* Absolute black rendering for markdown or body blocks */\n    --color-html-link: #58a6ff;               \n\n    /* Border Radii */\n    --border-radius-card: 8px;\n    --border-radius-input: 6px;\n    --border-radius-clear-btn: 50%;\n    --card-border-radius: 8px;\n\n    /* Spacing */\n    --padding-container-top: 24px;\n    --padding-card: 24px;\n    --padding-test-notice-vertical: 12px;\n    --padding-test-notice-horizontal: 24px;\n    --margin-bottom-card: 16px;\n    --padding-form-input: 12px;\n    --card-padding: 24px;\n    --card-margin-bottom: 16px;\n\n    /* Dimensions */\n    --container-width: 448px;\n    --submit-btn-height: 48px;\n    --checkbox-size: 18px;\n\n    /* Others */\n    --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n    --opacity-placeholder: 0.6;               /* Darkened slightly for higher initial text visibility */\n}"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -320,
+        0
+      ],
+      "id": "895e9e77-6768-4ff9-ae1d-15216330d28e",
+      "name": "On form submission",
+      "webhookId": "6f55e215-c4dc-4d88-bf27-e4a87687b8b9"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        224
+      ],
+      "id": "210999ce-c9de-4843-be67-5bb59c8e1cc9",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "BPWMsJNiqr5HXvC7",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab the raw text containing the markdown json block\nlet rawText = $input.all()[0].json.text;\n\n// Clean out the markdown code fence wrappers if they exist\nrawText = rawText.replace(/```json\\n?/, '').replace(/```\\n?$/, '').trim();\n\n// Parse the cleaned string into a true JavaScript array\nconst parsedArray = JSON.parse(rawText);\n\n// Map the items back out so n8n processes each scene as an individual row\nreturn parsedArray.map(item => ({ json: item }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        0
+      ],
+      "id": "b5bd3524-b878-40a0-a2b3-dfc55ff8ebff",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.Topic }}:\n{{ $json['The Story'] }}",
+        "options": {
+          "systemMessage": "You are a helpful assistant. You are an expert scriptwriter specializing in historical and religious storytelling, specifically Sikh History. Your job is to take a raw story brief and expand it into a powerful, emotionally engaging script for a 60-second vertical YouTube Short.\nBreak the story down into 4 to 6 distinct, sequential scenes. For each scene, write the narration strictly in Hinglish (Hindi language written in the Latin/English alphabet). Keep the tone respectful, clear, and impactful.\n\n# TOOLS TO USE\nTool: Seach Web: You can use this tool to search the web for more details regarding the topic and create an accurate story",
+          "maxIterations": 10
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "ba406382-d40c-4c2c-a5e0-9b788c12b2ed",
+      "name": "Script Writter"
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        32,
+        224
+      ],
+      "id": "86f43ee4-c8d2-4195-9b17-f8136b1f6d37",
+      "name": "Tool: Seach Web",
+      "credentials": {
+        "tavilyApi": {
+          "id": "wrxVE3AUAiHj8n8k",
+          "name": "Tavily account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a creative visual director and expert AI art prompt engineer specializing in historical storytelling.\n\nYou will receive a scene-by-scene script about Sikh history. Your job is to output a JSON array of objects containing detailed image prompts for each scene that maintain strict character and thematic consistency.\n\nVISUAL STYLE REQUIREMENTS (Traditional Art):\n1. The visual style must NOT be photorealistic or cinematic. It must look like an old, authentic hand-painted artwork. \n2. Use these exact style descriptors in every single prompt: \"Traditional Indian miniature painting style, authentic antique hand-painted texture, visible brushstrokes, rich tempera and natural pigment tones, soft golden aging overlay, historical manuscript artwork.\"\n3. Aspect Ratio: Always append \" --ar 9:16\" to the very end of every image prompt for vertical video formatting.\n\nCRITICAL INSTRUCTIONS FOR CHARACTER CONSISTENCY:\n1. Scan the provided script to identify the central figures (e.g., specific Gurus, historical figures, or warriors).\n2. You must create a definitive, historically accurate physical description for each main character based on traditional art history (e.g., if it is Guru Nanak Dev Ji, he must always have a serene expression, a white/grey flowing beard, and earthy or saffron/yellow robes). Repeat those exact details word-for-word in every single scene prompt where that character appears. Do not just use their name; describe their features, beard color/style, clothing colors, and turban style identically every time to ensure they look like the same person across the story.\n3. Keep background characters consistent: \"15th-18th century Punjabi villagers, traditional plain rustic khadi attire, historic Punjab village setting.\"\n\nOutput your final response strictly as a JSON Array of objects using this exact schema:\n[\n  {\n    \"scene\": 1,\n    \"title\": \"Scene Title\",\n    \"narration\": \"The exact Hinglish narration text provided to you\",\n    \"image_prompt\": \"Detailed prompt starting with the visual style, followed by identical character descriptions, scene action, and background environment details. Ending with --ar 9:16\"\n  }\n]"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        240,
+        0
+      ],
+      "id": "a4f1a977-db9e-4fd4-ac64-09bb6c4ae705",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        240,
+        224
+      ],
+      "id": "5204230d-ecdb-46e1-a7db-f836a511787c",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "BPWMsJNiqr5HXvC7",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json[\"Email Address\"] }}",
+        "subject": "Regarding the requested script",
+        "message": "={{ $json.emailHtmlBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1264,
+        0
+      ],
+      "id": "931db127-8bfe-425f-8f46-8aea12d90b72",
+      "name": "Send a message",
+      "webhookId": "fecaa393-c28a-47d2-85b1-296a05a475a2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kbTHkBcWeJklq7tQ",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        816,
+        0
+      ],
+      "id": "b5dff299-85ab-4c5a-934a-042724cbee6e",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the array of scenes from the incoming data key\nconst scenes = Object.values($input.all()[0].json.data);\n\n// Build the HTML scaffolding\nlet htmlOutput = `\n<p>Sat Sri Akal! Here is your production sheet for the new Short:</p>\n\n<table border=\"1\" cellpadding=\"8\" style=\"border-collapse: collapse; width: 100%; font-family: sans-serif;\">\n  <tr style=\"background-color: #f2f2f2; text-align: left;\">\n    <th style=\"width: 8%;\">Scene</th>\n    <th style=\"width: 17%;\">Title</th>\n    <th style=\"width: 35%;\">What to Say (Hinglish Narration)</th>\n    <th style=\"width: 40%;\">Image Prompt (Copy/Paste into Midjourney or DALL-E)</th>\n  </tr>\n`;\n\n// Loop through each scene and append the rows\nfor (const item of scenes) {\n  htmlOutput += `\n  <tr>\n    <td>${item.scene}</td>\n    <td><strong>${item.title}</strong></td>\n    <td style=\"font-style: italic; color: #333; line-height: 1.4;\">\"${item.narration}\"</td>\n    <td style=\"background-color: #fafafa; font-family: monospace; font-size: 12px; word-break: break-word; color: #555;\">${item.image_prompt}</td>\n  </tr>\n  `;\n}\n\n// Close the table formatting\nhtmlOutput += `\n</table>\n<p style=\"margin-top: 20px; color: #666; font-size: 11px;\">Automated via n8n pipeline.</p>\n`;\n\n// Return the fully built string to the next node\nreturn [{ json: { emailHtmlBody: htmlOutput } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "9be0ee06-c766-4b15-81b8-2a5ea942b37f",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Script Writter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Script Writter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Script Writter": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Seach Web": {
+      "ai_tool": [
+        [
+          {
+            "node": "Script Writter",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "07d46877-331a-41d5-b8ec-e06af26dcb89",
+  "activeVersionId": "563cfa0d-1d84-4efa-8bda-5e5682be40a2",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-07-11T07:26:28.024Z",
+      "createdAt": "2026-07-11T07:26:28.024Z",
+      "role": "workflow:owner",
+      "workflowId": "8kbg43UgtXXMbBTH",
+      "projectId": "PC0hTUxCGn5E6pTT"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-07-11T14:06:01.000Z",
+    "createdAt": "2026-07-11T14:03:42.874Z",
+    "versionId": "563cfa0d-1d84-4efa-8bda-5e5682be40a2",
+    "workflowId": "8kbg43UgtXXMbBTH",
+    "nodes": [
+      {
+        "parameters": {
+          "formTitle": "Story Image Generator",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Topic"
+              },
+              {
+                "fieldLabel": "The Story"
+              },
+              {
+                "fieldLabel": "Email Address",
+                "fieldType": "email"
+              }
+            ]
+          },
+          "options": {
+            "appendAttribution": false,
+            "customCss": ":root {\n\t--font-family: 'Open Sans', sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 600;\n\t--font-size-body: 12px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 20px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 28px;\n\t--font-size-html-h2: 20px;\n\t--font-size-html-h3: 16px;\n\t--font-size-html-h4: 14px;\n\t--font-size-html-h5: 12px;\n\t--font-size-html-h6: 10px;\n\t--font-size-subheader: 14px;\n\n\t/* Colors */\n\t--color-background: #fbfcfe;\n\t--color-test-notice-text: #e6a23d;\n\t--color-test-notice-bg: #fefaf6;\n\t--color-test-notice-border: #f6dcb7;\n\t--color-card-bg: #ffffff;\n\t--color-card-border: #dbdfe7;\n\t--color-card-shadow: rgba(99, 77, 255, 0.06);\n\t--color-link: #7e8186;\n\t--color-header: #525356;\n\t--color-label: #555555;\n\t--color-input-border: #dbdfe7;\n\t--color-input-text: #71747A;\n\t--color-focus-border: rgb(90, 76, 194);\n\t--color-submit-btn-bg: #ff6d5a;\n\t--color-submit-btn-text: #ffffff;\n\t--color-error: #ea1f30;\n\t--color-required: #ff6d5a;\n\t--color-clear-button-bg: #7e8186;\n\t--color-html-text: #555;\n\t--color-html-link: #ff6d5a;\n\t--color-header-subtext: #7e8186;\n\n\t/* Border Radii */\n\t--border-radius-card: 8px;\n\t--border-radius-input: 6px;\n\t--border-radius-clear-btn: 50%;\n\t--card-border-radius: 8px;\n\n\t/* Spacing */\n\t--padding-container-top: 24px;\n\t--padding-card: 24px;\n\t--padding-test-notice-vertical: 12px;\n\t--padding-test-notice-horizontal: 24px;\n\t--margin-bottom-card: 16px;\n\t--padding-form-input: 12px;\n\t--card-padding: 24px;\n\t--card-margin-bottom: 16px;\n\n\t/* Dimensions */\n\t--container-width: 448px;\n\t--submit-btn-height: 48px;\n\t--checkbox-size: 18px;\n\n\t/* Others */\n\t--box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n\t--opacity-placeholder: 0.5;\n}"
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.6,
+        "position": [
+          -320,
+          0
+        ],
+        "id": "895e9e77-6768-4ff9-ae1d-15216330d28e",
+        "name": "On form submission",
+        "webhookId": "6f55e215-c4dc-4d88-bf27-e4a87687b8b9"
+      },
+      {
+        "parameters": {
+          "model": "openai/gpt-oss-120b",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          -112,
+          224
+        ],
+        "id": "210999ce-c9de-4843-be67-5bb59c8e1cc9",
+        "name": "Groq Chat Model",
+        "credentials": {
+          "groqApi": {
+            "id": "BPWMsJNiqr5HXvC7",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Grab the raw text containing the markdown json block\nlet rawText = $input.all()[0].json.text;\n\n// Clean out the markdown code fence wrappers if they exist\nrawText = rawText.replace(/```json\\n?/, '').replace(/```\\n?$/, '').trim();\n\n// Parse the cleaned string into a true JavaScript array\nconst parsedArray = JSON.parse(rawText);\n\n// Map the items back out so n8n processes each scene as an individual row\nreturn parsedArray.map(item => ({ json: item }));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          592,
+          0
+        ],
+        "id": "b5bd3524-b878-40a0-a2b3-dfc55ff8ebff",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.Topic }}:\n{{ $json['The Story'] }}",
+          "options": {
+            "systemMessage": "You are a helpful assistant. You are an expert scriptwriter specializing in historical and religious storytelling, specifically Sikh History. Your job is to take a raw story brief and expand it into a powerful, emotionally engaging script for a 60-second vertical YouTube Short.\nBreak the story down into 4 to 6 distinct, sequential scenes. For each scene, write the narration strictly in Hinglish (Hindi language written in the Latin/English alphabet). Keep the tone respectful, clear, and impactful.\n\n# TOOLS TO USE\nTool: Seach Web: You can use this tool to search the web for more details regarding the topic and create an accurate story",
+            "maxIterations": 10
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          -112,
+          0
+        ],
+        "id": "ba406382-d40c-4c2c-a5e0-9b788c12b2ed",
+        "name": "Script Writter"
+      },
+      {
+        "parameters": {
+          "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+        "typeVersion": 1,
+        "position": [
+          32,
+          224
+        ],
+        "id": "86f43ee4-c8d2-4195-9b17-f8136b1f6d37",
+        "name": "Tool: Seach Web",
+        "credentials": {
+          "tavilyApi": {
+            "id": "wrxVE3AUAiHj8n8k",
+            "name": "Tavily account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.output }}",
+          "messages": {
+            "messageValues": [
+              {
+                "message": "You are a creative visual director and expert AI art prompt engineer specializing in historical storytelling.\n\nYou will receive a scene-by-scene script about Sikh history. Your job is to output a JSON array of objects containing detailed image prompts for each scene that maintain strict character and thematic consistency.\n\nVISUAL STYLE REQUIREMENTS (Traditional Art):\n1. The visual style must NOT be photorealistic or cinematic. It must look like an old, authentic hand-painted artwork. \n2. Use these exact style descriptors in every single prompt: \"Traditional Indian miniature painting style, authentic antique hand-painted texture, visible brushstrokes, rich tempera and natural pigment tones, soft golden aging overlay, historical manuscript artwork.\"\n3. Aspect Ratio: Always append \" --ar 9:16\" to the very end of every image prompt for vertical video formatting.\n\nCRITICAL INSTRUCTIONS FOR CHARACTER CONSISTENCY:\n1. Scan the provided script to identify the central figures (e.g., specific Gurus, historical figures, or warriors).\n2. You must create a definitive, historically accurate physical description for each main character based on traditional art history (e.g., if it is Guru Nanak Dev Ji, he must always have a serene expression, a white/grey flowing beard, and earthy or saffron/yellow robes). Repeat those exact details word-for-word in every single scene prompt where that character appears. Do not just use their name; describe their features, beard color/style, clothing colors, and turban style identically every time to ensure they look like the same person across the story.\n3. Keep background characters consistent: \"15th-18th century Punjabi villagers, traditional plain rustic khadi attire, historic Punjab village setting.\"\n\nOutput your final response strictly as a JSON Array of objects using this exact schema:\n[\n  {\n    \"scene\": 1,\n    \"title\": \"Scene Title\",\n    \"narration\": \"The exact Hinglish narration text provided to you\",\n    \"image_prompt\": \"Detailed prompt starting with the visual style, followed by identical character descriptions, scene action, and background environment details. Ending with --ar 9:16\"\n  }\n]"
+              }
+            ]
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          240,
+          0
+        ],
+        "id": "a4f1a977-db9e-4fd4-ac64-09bb6c4ae705",
+        "name": "Basic LLM Chain"
+      },
+      {
+        "parameters": {
+          "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          240,
+          224
+        ],
+        "id": "5204230d-ecdb-46e1-a7db-f836a511787c",
+        "name": "Groq Chat Model1",
+        "credentials": {
+          "groqApi": {
+            "id": "BPWMsJNiqr5HXvC7",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sendTo": "={{ $('On form submission').item.json[\"Email Address\"] }}",
+          "subject": "Regarding the requested script",
+          "message": "={{ $json.emailHtmlBody }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          1264,
+          0
+        ],
+        "id": "931db127-8bfe-425f-8f46-8aea12d90b72",
+        "name": "Send a message",
+        "webhookId": "fecaa393-c28a-47d2-85b1-296a05a475a2",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "kbTHkBcWeJklq7tQ",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          816,
+          0
+        ],
+        "id": "b5dff299-85ab-4c5a-934a-042724cbee6e",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get the array of scenes from the incoming data key\nconst scenes = Object.values($input.all()[0].json.data);\n\n// Build the HTML scaffolding\nlet htmlOutput = `\n<p>Sat Sri Akal! Here is your production sheet for the new Short:</p>\n\n<table border=\"1\" cellpadding=\"8\" style=\"border-collapse: collapse; width: 100%; font-family: sans-serif;\">\n  <tr style=\"background-color: #f2f2f2; text-align: left;\">\n    <th style=\"width: 8%;\">Scene</th>\n    <th style=\"width: 17%;\">Title</th>\n    <th style=\"width: 35%;\">What to Say (Hinglish Narration)</th>\n    <th style=\"width: 40%;\">Image Prompt (Copy/Paste into Midjourney or DALL-E)</th>\n  </tr>\n`;\n\n// Loop through each scene and append the rows\nfor (const item of scenes) {\n  htmlOutput += `\n  <tr>\n    <td>${item.scene}</td>\n    <td><strong>${item.title}</strong></td>\n    <td style=\"font-style: italic; color: #333; line-height: 1.4;\">\"${item.narration}\"</td>\n    <td style=\"background-color: #fafafa; font-family: monospace; font-size: 12px; word-break: break-word; color: #555;\">${item.image_prompt}</td>\n  </tr>\n  `;\n}\n\n// Close the table formatting\nhtmlOutput += `\n</table>\n<p style=\"margin-top: 20px; color: #666; font-size: 11px;\">Automated via n8n pipeline.</p>\n`;\n\n// Return the fully built string to the next node\nreturn [{ json: { emailHtmlBody: htmlOutput } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1040,
+          0
+        ],
+        "id": "9be0ee06-c766-4b15-81b8-2a5ea942b37f",
+        "name": "Code in JavaScript1"
+      }
+    ],
+    "connections": {
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Script Writter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Script Writter",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Script Writter": {
+        "main": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tool: Seach Web": {
+        "ai_tool": [
+          [
+            {
+              "node": "Script Writter",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Basic LLM Chain": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "Manjot Singh",
+    "name": "Version 563cfa0d",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
