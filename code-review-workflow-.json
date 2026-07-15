@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-11T06:39:55.414Z",
+  "updatedAt": "2026-07-15T06:27:24.660Z",
   "createdAt": "2026-07-11T05:36:36.211Z",
   "id": "7YoHM1NgmTEXrQr6",
   "name": "Code Review workflow",
@@ -178,24 +178,24 @@
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -256,
-        448
+        -320,
+        480
       ],
       "typeVersion": 1
     },
     {
       "parameters": {
         "content": "**3-Create Prompt from diffs**\nThis Code node runs a JavaScript snippet to:\n-Parse file diffs from the previous HTTP Request node\n-Format each diff with its file name\n-Build a structured natural language prompt for the AI agent\n\nThe final output is a clear, contextual instruction like:\n*\"You are a senior iOS developer. Please review the following code changes in these files...\"*\n",
-        "height": 368,
-        "width": 360,
+        "height": 720,
+        "width": 216,
         "color": 2
       },
       "id": "c3347268-28d2-47ae-ae65-021466999de9",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        0,
-        -144
+        144,
+        -496
       ],
       "typeVersion": 1
     },
@@ -418,7 +418,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "7c08f0b9-019b-4d46-b93b-ef909578d53f",
+  "versionId": "c8f34146-c562-4c55-91c7-e47d151fdbc8",
   "activeVersionId": "7c08f0b9-019b-4d46-b93b-ef909578d53f",
   "triggerCount": 1,
   "shared": [
