@@ -1,0 +1,531 @@
+{
+  "updatedAt": "2026-07-15T16:10:03.754Z",
+  "createdAt": "2026-07-15T14:35:40.140Z",
+  "id": "Sd2RXsRtFW5INMUk",
+  "name": "Audio Transcriber",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "efbb3c1a-c986-4a2e-875c-dbcc67ec1289",
+      "name": "Telegram Trigger",
+      "webhookId": "f5dc72e4-7085-4528-b291-3425dd3ffcdb",
+      "credentials": {
+        "telegramApi": {
+          "id": "y5Spt2bNN0Ehv0JY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.audio.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "03ebce24-fbbd-4458-bbea-cd74bd724edc",
+      "name": "Get a file",
+      "webhookId": "eed75ead-6573-4a8d-9a32-35a7d1522204",
+      "credentials": {
+        "telegramApi": {
+          "id": "y5Spt2bNN0Ehv0JY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/audio/transcriptions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "model",
+              "value": "whisper-large-v3-turbo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        640,
+        0
+      ],
+      "id": "2b085294-30b1-488b-8435-0ad980d978a4",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "PJr8ZyVUCoihS2CS",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "2f178cbe-2e66-45e5-91ab-fe3816456753",
+      "name": "Send a text message",
+      "webhookId": "62b1c7c1-62db-4e07-aeee-3ffc49685ab0",
+      "credentials": {
+        "telegramApi": {
+          "id": "y5Spt2bNN0Ehv0JY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Change 'text' to match the exact field name coming from your HTTP node\nconst fullText = $input.item.json.text || \"\"; \nconst maxLength = 4000; // Safe threshold under Telegram's 4096 limit\nconst chunks = [];\n\nif (fullText.length <= maxLength) {\n    // If it's already small enough, pass it through unchanged\n    return [{ json: { text: fullText } }];\n}\n\n// Split the text roughly by paragraphs or sentences so it doesn't break mid-word\nconst words = fullText.split(' ');\nlet currentChunk = \"\";\n\nfor (const word of words) {\n    // Check if adding the next word exceeds the max length\n    if ((currentChunk + \" \" + word).length > maxLength) {\n        chunks.push({ json: { text: currentChunk.trim() } });\n        currentChunk = word; // Start a new chunk with the current word\n    } else {\n        currentChunk += (currentChunk === \"\" ? \"\" : \" \") + word;\n    }\n}\n\n// Push the last remaining text chunk\nif (currentChunk.trim().length > 0) {\n    chunks.push({ json: { text: currentChunk.trim() } });\n}\n\nreturn chunks;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "id": "d8202f17-ddb6-4c18-860e-966ee90a2f69",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.message.from.id }}",
+        "text": "Hey! Thanks for using Transcriber Aurosee Bot! We'll send you the transcriptions right away!",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "da2c62e8-8dd5-4bb2-aefe-4e60c7b8accd",
+      "name": "Reply to the input",
+      "webhookId": "5daa6ba9-827b-450f-8c74-a6609a2a9b02",
+      "credentials": {
+        "telegramApi": {
+          "id": "y5Spt2bNN0Ehv0JY",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Reply to the input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reply to the input": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "none",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 621346369,
+          "message": {
+            "message_id": 44,
+            "from": {
+              "id": 7602680805,
+              "is_bot": false,
+              "first_name": "M",
+              "language_code": "en"
+            },
+            "chat": {
+              "id": 7602680805,
+              "first_name": "M",
+              "type": "private"
+            },
+            "date": 1784131773,
+            "forward_origin": {
+              "type": "user",
+              "sender_user": {
+                "id": 5641924507,
+                "is_bot": false,
+                "first_name": "Aurosee",
+                "last_name": "Panda",
+                "language_code": "en"
+              },
+              "date": 1784129373
+            },
+            "forward_from": {
+              "id": 5641924507,
+              "is_bot": false,
+              "first_name": "Aurosee",
+              "last_name": "Panda",
+              "language_code": "en"
+            },
+            "forward_date": 1784129373,
+            "audio": {
+              "duration": 2022,
+              "file_name": "output.ogg",
+              "mime_type": "audio/vorbis",
+              "file_id": "CQACAgUAAxkBAAMSalena53Vuz20ZCOFwGmN5Ij6rwsAAnMeAAJwr8BW-VYhVTYPfcg9BA",
+              "file_unique_id": "AgADcx4AAnCvwFY",
+              "file_size": 7850129
+            }
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Reply to the input": [
+      {
+        "json": {
+          "ok": true,
+          "result": {
+            "message_id": 45,
+            "from": {
+              "id": 8651577095,
+              "is_bot": true,
+              "first_name": "Transcriber bot",
+              "username": "Transcriber_auro_bot"
+            },
+            "chat": {
+              "id": 7602680805,
+              "first_name": "M",
+              "type": "private"
+            },
+            "date": 1784131781,
+            "text": "Hey! Thanks for using Transcriber Aurosee Bot! We'll send you the transcriptions right away!"
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "e588d84d-cd4f-49ed-baa2-9527cb990856",
+  "activeVersionId": "e588d84d-cd4f-49ed-baa2-9527cb990856",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-07-15T14:35:40.142Z",
+      "createdAt": "2026-07-15T14:35:40.142Z",
+      "role": "workflow:owner",
+      "workflowId": "Sd2RXsRtFW5INMUk",
+      "projectId": "PC0hTUxCGn5E6pTT"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-07-15T16:10:31.000Z",
+    "createdAt": "2026-07-15T16:09:56.554Z",
+    "versionId": "e588d84d-cd4f-49ed-baa2-9527cb990856",
+    "workflowId": "Sd2RXsRtFW5INMUk",
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "message"
+          ],
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          0,
+          0
+        ],
+        "id": "efbb3c1a-c986-4a2e-875c-dbcc67ec1289",
+        "name": "Telegram Trigger",
+        "webhookId": "f5dc72e4-7085-4528-b291-3425dd3ffcdb",
+        "credentials": {
+          "telegramApi": {
+            "id": "y5Spt2bNN0Ehv0JY",
+            "name": "Telegram account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "fileId": "={{ $('Telegram Trigger').item.json.message.audio.file_id }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          416,
+          0
+        ],
+        "id": "03ebce24-fbbd-4458-bbea-cd74bd724edc",
+        "name": "Get a file",
+        "webhookId": "eed75ead-6573-4a8d-9a32-35a7d1522204",
+        "credentials": {
+          "telegramApi": {
+            "id": "y5Spt2bNN0Ehv0JY",
+            "name": "Telegram account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.groq.com/openai/v1/audio/transcriptions",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "contentType": "multipart-form-data",
+          "bodyParameters": {
+            "parameters": [
+              {
+                "parameterType": "formBinaryData",
+                "name": "file",
+                "inputDataFieldName": "data"
+              },
+              {
+                "name": "model",
+                "value": "whisper-large-v3-turbo"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          640,
+          0
+        ],
+        "id": "2b085294-30b1-488b-8435-0ad980d978a4",
+        "name": "HTTP Request",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "PJr8ZyVUCoihS2CS",
+            "name": "Header Auth account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+          "text": "={{ $json.text }}",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          1072,
+          0
+        ],
+        "id": "2f178cbe-2e66-45e5-91ab-fe3816456753",
+        "name": "Send a text message",
+        "webhookId": "62b1c7c1-62db-4e07-aeee-3ffc49685ab0",
+        "credentials": {
+          "telegramApi": {
+            "id": "y5Spt2bNN0Ehv0JY",
+            "name": "Telegram account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Change 'text' to match the exact field name coming from your HTTP node\nconst fullText = $input.item.json.text || \"\"; \nconst maxLength = 4000; // Safe threshold under Telegram's 4096 limit\nconst chunks = [];\n\nif (fullText.length <= maxLength) {\n    // If it's already small enough, pass it through unchanged\n    return [{ json: { text: fullText } }];\n}\n\n// Split the text roughly by paragraphs or sentences so it doesn't break mid-word\nconst words = fullText.split(' ');\nlet currentChunk = \"\";\n\nfor (const word of words) {\n    // Check if adding the next word exceeds the max length\n    if ((currentChunk + \" \" + word).length > maxLength) {\n        chunks.push({ json: { text: currentChunk.trim() } });\n        currentChunk = word; // Start a new chunk with the current word\n    } else {\n        currentChunk += (currentChunk === \"\" ? \"\" : \" \") + word;\n    }\n}\n\n// Push the last remaining text chunk\nif (currentChunk.trim().length > 0) {\n    chunks.push({ json: { text: currentChunk.trim() } });\n}\n\nreturn chunks;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          880,
+          0
+        ],
+        "id": "d8202f17-ddb6-4c18-860e-966ee90a2f69",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $json.message.from.id }}",
+          "text": "Hey! Thanks for using Transcriber Aurosee Bot! We'll send you the transcriptions right away!",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          0
+        ],
+        "id": "da2c62e8-8dd5-4bb2-aefe-4e60c7b8accd",
+        "name": "Reply to the input",
+        "webhookId": "5daa6ba9-827b-450f-8c74-a6609a2a9b02",
+        "credentials": {
+          "telegramApi": {
+            "id": "y5Spt2bNN0Ehv0JY",
+            "name": "Telegram account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Telegram Trigger": {
+        "main": [
+          [
+            {
+              "node": "Reply to the input",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a file": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Reply to the input": {
+        "main": [
+          [
+            {
+              "node": "Get a file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "Manjot Singh",
+    "name": "Version e588d84d",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}
