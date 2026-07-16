@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-11T14:05:28.971Z",
+  "updatedAt": "2026-07-16T11:23:25.475Z",
   "createdAt": "2026-07-11T07:26:28.022Z",
   "id": "8kbg43UgtXXMbBTH",
   "name": "Script Generator",
@@ -314,7 +314,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "07d46877-331a-41d5-b8ec-e06af26dcb89",
+  "versionId": "b4a6ac01-5c5d-477c-b948-69a5b6272b74",
   "activeVersionId": "563cfa0d-1d84-4efa-8bda-5e5682be40a2",
   "triggerCount": 1,
   "shared": [
