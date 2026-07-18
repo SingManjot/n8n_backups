@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-15T16:10:03.754Z",
+  "updatedAt": "2026-07-18T07:40:40.653Z",
   "createdAt": "2026-07-15T14:35:40.140Z",
   "id": "Sd2RXsRtFW5INMUk",
   "name": "Audio Transcriber",
@@ -16,8 +16,8 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.3,
       "position": [
-        0,
-        0
+        -160,
+        16
       ],
       "id": "efbb3c1a-c986-4a2e-875c-dbcc67ec1289",
       "name": "Telegram Trigger",
@@ -149,6 +149,64 @@
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "281328d1-c74e-4038-af89-17009c515bcd",
+              "leftValue": "={{ $json.message.audio.file_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        16,
+        16
+      ],
+      "id": "f7d106df-ad87-4ca7-8168-846f56381339",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Uhh hooo! Looks like you've not sent a valid audio file. I'm currently unable to process any other requestes. Please try again with a valid audio file. Thanks for using Aurosee Transcriber Bot",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        224
+      ],
+      "id": "90850f21-d00b-4355-97cf-8133497fba1c",
+      "name": "Reply on a bad request",
+      "webhookId": "584d8921-f6e6-4764-b0dd-8568170c0352",
+      "credentials": {
+        "telegramApi": {
+          "id": "y5Spt2bNN0Ehv0JY",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "connections": {
@@ -156,7 +214,7 @@
       "main": [
         [
           {
-            "node": "Reply to the input",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -201,6 +259,24 @@
         [
           {
             "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Reply to the input",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply on a bad request",
             "type": "main",
             "index": 0
           }
@@ -301,8 +377,8 @@
       }
     ]
   },
-  "versionId": "e588d84d-cd4f-49ed-baa2-9527cb990856",
-  "activeVersionId": "e588d84d-cd4f-49ed-baa2-9527cb990856",
+  "versionId": "40468952-b349-4261-a98e-89266b129fe7",
+  "activeVersionId": "40468952-b349-4261-a98e-89266b129fe7",
   "triggerCount": 1,
   "shared": [
     {
@@ -314,9 +390,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-07-15T16:10:31.000Z",
-    "createdAt": "2026-07-15T16:09:56.554Z",
-    "versionId": "e588d84d-cd4f-49ed-baa2-9527cb990856",
+    "updatedAt": "2026-07-18T07:40:47.000Z",
+    "createdAt": "2026-07-18T07:40:40.654Z",
+    "versionId": "40468952-b349-4261-a98e-89266b129fe7",
     "workflowId": "Sd2RXsRtFW5INMUk",
     "nodes": [
       {
@@ -329,8 +405,8 @@
         "type": "n8n-nodes-base.telegramTrigger",
         "typeVersion": 1.3,
         "position": [
-          0,
-          0
+          -160,
+          16
         ],
         "id": "efbb3c1a-c986-4a2e-875c-dbcc67ec1289",
         "name": "Telegram Trigger",
@@ -462,6 +538,64 @@
             "name": "Telegram account"
           }
         }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "281328d1-c74e-4038-af89-17009c515bcd",
+                "leftValue": "={{ $json.message.audio.file_id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          16,
+          16
+        ],
+        "id": "f7d106df-ad87-4ca7-8168-846f56381339",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+          "text": "Uhh hooo! Looks like you've not sent a valid audio file. I'm currently unable to process any other requestes. Please try again with a valid audio file. Thanks for using Aurosee Transcriber Bot",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          224
+        ],
+        "id": "90850f21-d00b-4355-97cf-8133497fba1c",
+        "name": "Reply on a bad request",
+        "webhookId": "584d8921-f6e6-4764-b0dd-8568170c0352",
+        "credentials": {
+          "telegramApi": {
+            "id": "y5Spt2bNN0Ehv0JY",
+            "name": "Telegram account"
+          }
+        }
       }
     ],
     "connections": {
@@ -469,7 +603,7 @@
         "main": [
           [
             {
-              "node": "Reply to the input",
+              "node": "If",
               "type": "main",
               "index": 0
             }
@@ -519,13 +653,31 @@
             }
           ]
         ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Reply to the input",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Reply on a bad request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Manjot Singh",
-    "name": "Version e588d84d",
+    "name": "Version 40468952",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": []
 }
