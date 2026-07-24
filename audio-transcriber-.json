@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-18T07:40:40.653Z",
+  "updatedAt": "2026-07-23T13:19:38.851Z",
   "createdAt": "2026-07-15T14:35:40.140Z",
   "id": "Sd2RXsRtFW5INMUk",
   "name": "Audio Transcriber",
@@ -77,7 +77,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        640,
+        608,
         0
       ],
       "id": "2b085294-30b1-488b-8435-0ad980d978a4",
@@ -87,7 +87,8 @@
           "id": "PJr8ZyVUCoihS2CS",
           "name": "Header Auth account"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -100,8 +101,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1072,
-        0
+        1248,
+        -16
       ],
       "id": "2f178cbe-2e66-45e5-91ab-fe3816456753",
       "name": "Send a text message",
@@ -121,7 +122,7 @@
       "typeVersion": 2,
       "position": [
         880,
-        0
+        -16
       ],
       "id": "d8202f17-ddb6-4c18-860e-966ee90a2f69",
       "name": "Code in JavaScript1"
@@ -207,6 +208,40 @@
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a5b485c5-22d3-4e7f-a435-3bfa7683dd80",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        256
+      ],
+      "id": "590c1a87-d7f1-4fb2-a1ad-b9df2f5fcb0a",
+      "name": "If1"
     }
   ],
   "connections": {
@@ -237,6 +272,13 @@
         [
           {
             "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If1",
             "type": "main",
             "index": 0
           }
@@ -377,7 +419,7 @@
       }
     ]
   },
-  "versionId": "40468952-b349-4261-a98e-89266b129fe7",
+  "versionId": "1c66ec6a-599d-4be1-842b-2964f3f16c21",
   "activeVersionId": "40468952-b349-4261-a98e-89266b129fe7",
   "triggerCount": 1,
   "shared": [
