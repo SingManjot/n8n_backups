@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-21T11:46:21.738Z",
+  "updatedAt": "2026-07-24T06:56:07.037Z",
   "createdAt": "2026-07-11T07:26:28.022Z",
   "id": "8kbg43UgtXXMbBTH",
   "name": "Script Generator",
@@ -199,6 +199,19 @@
       ],
       "id": "9be0ee06-c766-4b15-81b8-2a5ea942b37f",
       "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
+      "typeVersion": 1,
+      "position": [
+        608,
+        320
+      ],
+      "id": "e4e75aca-d0ff-4989-969f-22c412827a81",
+      "name": "Azure OpenAI Chat Model"
     }
   ],
   "connections": {
@@ -313,7 +326,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "805b484d-8b94-4d0e-a674-2ce11453d0c2",
+  "versionId": "831d7950-7dd4-4926-a2b6-4441343e5044",
   "activeVersionId": "805b484d-8b94-4d0e-a674-2ce11453d0c2",
   "triggerCount": 1,
   "shared": [
