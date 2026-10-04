@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-16T09:52:55.989Z",
+  "updatedAt": "2026-10-04T07:27:03.355Z",
   "createdAt": "2026-07-11T07:26:28.022Z",
   "id": "8kbg43UgtXXMbBTH",
   "name": "Script Generator",
@@ -36,26 +36,6 @@
       "id": "895e9e77-6768-4ff9-ae1d-15216330d28e",
       "name": "On form submission",
       "webhookId": "6f55e215-c4dc-4d88-bf27-e4a87687b8b9"
-    },
-    {
-      "parameters": {
-        "model": "openai/gpt-oss-120b",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-      "typeVersion": 1,
-      "position": [
-        -112,
-        224
-      ],
-      "id": "210999ce-c9de-4843-be67-5bb59c8e1cc9",
-      "name": "Groq Chat Model",
-      "credentials": {
-        "groqApi": {
-          "id": "BPWMsJNiqr5HXvC7",
-          "name": "Groq account"
-        }
-      }
     },
     {
       "parameters": {
@@ -198,6 +178,25 @@
           "name": "Google Gemini(PaLM) Api account"
         }
       }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -112,
+        208
+      ],
+      "id": "7c52d6c8-85bf-4c36-93d6-eaaaf99538d6",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Kd8uBduGhHlm2FRI",
+          "name": "Google Gemini for Calorie Tracker"
+        }
+      }
     }
   ],
   "connections": {
@@ -207,17 +206,6 @@
           {
             "node": "Script Writter",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Groq Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Script Writter",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -299,6 +287,17 @@
           }
         ]
       ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Script Writter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -312,8 +311,8 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "42b8dea4-59d1-4eb0-a2b5-096e00f2f3ff",
-  "activeVersionId": "42b8dea4-59d1-4eb0-a2b5-096e00f2f3ff",
+  "versionId": "b1b9d9bb-ca30-46d9-b592-acfcef26b6be",
+  "activeVersionId": "b1b9d9bb-ca30-46d9-b592-acfcef26b6be",
   "triggerCount": 1,
   "shared": [
     {
@@ -325,9 +324,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-16T09:53:35.000Z",
-    "createdAt": "2026-09-16T09:52:55.990Z",
-    "versionId": "42b8dea4-59d1-4eb0-a2b5-096e00f2f3ff",
+    "updatedAt": "2026-10-04T07:27:05.000Z",
+    "createdAt": "2026-10-04T07:27:03.356Z",
+    "versionId": "b1b9d9bb-ca30-46d9-b592-acfcef26b6be",
     "workflowId": "8kbg43UgtXXMbBTH",
     "nodes": [
       {
@@ -360,26 +359,6 @@
         "id": "895e9e77-6768-4ff9-ae1d-15216330d28e",
         "name": "On form submission",
         "webhookId": "6f55e215-c4dc-4d88-bf27-e4a87687b8b9"
-      },
-      {
-        "parameters": {
-          "model": "openai/gpt-oss-120b",
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-        "typeVersion": 1,
-        "position": [
-          -112,
-          224
-        ],
-        "id": "210999ce-c9de-4843-be67-5bb59c8e1cc9",
-        "name": "Groq Chat Model",
-        "credentials": {
-          "groqApi": {
-            "id": "BPWMsJNiqr5HXvC7",
-            "name": "Groq account"
-          }
-        }
       },
       {
         "parameters": {
@@ -522,6 +501,25 @@
             "name": "Google Gemini(PaLM) Api account"
           }
         }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          -112,
+          208
+        ],
+        "id": "7c52d6c8-85bf-4c36-93d6-eaaaf99538d6",
+        "name": "Google Gemini Chat Model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "Kd8uBduGhHlm2FRI",
+            "name": "Google Gemini for Calorie Tracker"
+          }
+        }
       }
     ],
     "connections": {
@@ -531,17 +529,6 @@
             {
               "node": "Script Writter",
               "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Groq Chat Model": {
-        "ai_languageModel": [
-          [
-            {
-              "node": "Script Writter",
-              "type": "ai_languageModel",
               "index": 0
             }
           ]
@@ -623,11 +610,22 @@
             }
           ]
         ]
+      },
+      "Google Gemini Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Script Writter",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Manjot Singh",
-    "name": "Version 42b8dea4",
+    "name": "Version b1b9d9bb",
     "description": "",
     "autosaved": true
   },
